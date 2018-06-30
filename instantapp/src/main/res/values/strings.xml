@@ -1,0 +1,5 @@
+<resources>
+    <string name="frag1title">Profile</string>
+    <string name="frag2title">Surveys</string>
+    <string name="frag3title">Cashbacks</string>
+</resources>
