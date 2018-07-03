@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="surveys">
+        <item name="cashvsdebitcards">Cash vs Debit Cards?</item>
+        <item name="carsvsmatatus">Cars vs Matatus?</item>
+        <item name="radiovstv">Radio vs TV?</item>
+        <item name="samsungvstechno">Samsung vs Techno?</item>
+        <item name="eatingouttoday">Eating out today?</item>
+    </string-array>
+
+    <string-array name="no_questions">
+        <item name="fivequestions">5 questions</item>
+        <item name="eightquestions">8 questions</item>
+        <item name="threequestions">3 questions</item>
+        <item name="sixquestions">6 questions</item>
+        <item name="sevenquestions">7 questions</item>
+    </string-array>
+
+</resources>

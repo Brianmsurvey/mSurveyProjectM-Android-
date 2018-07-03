@@ -21,5 +21,18 @@
     <string name="facebook_app_id">240195956789125</string>
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
 
+    <!--Sample surveys-->
+    <string name="cashvsdebitcards">Cash vs Debit Cards?</string>
+    <string name="carsvsmatatus">Cars vs Matatus?</string>
+    <string name="radiovstv">Radio vs TV?</string>
+    <string name="samsungvstechno">Samsung vs Techno?</string>
+    <string name="eatingouttoday">Eating out today?</string>
+
+    <string name="fivequestions">5 questions</string>
+    <string name="eightquestions">8 questions</string>
+    <string name="threequestions">3 questions</string>
+    <string name="sixquestions">6 questions</string>
+    <string name="sevenquestions">7 questions</string>
+
 
 </resources>
