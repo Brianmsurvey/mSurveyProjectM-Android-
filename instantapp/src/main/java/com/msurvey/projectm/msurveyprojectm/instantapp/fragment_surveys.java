@@ -20,8 +20,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class fragment_surveys extends Fragment {
 
-    private RecyclerView mSurveyList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

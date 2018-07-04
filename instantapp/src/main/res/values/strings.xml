@@ -20,5 +20,14 @@
     <string name="sixquestions">6 questions</string>
     <string name="sevenquestions">7 questions</string>
 
+    <!--menu items-->
+    <string name="about_msurvey">About mSurvey</string>
+    <string name="item_profile">Profile</string>
+
+    <!--dummy user-->
+    <string name="dummy_user">Brian Ngugi</string>
+    <string name="dummy_user_email">brian.ngugi@msurvey.co</string>
+
+
 
 </resources>

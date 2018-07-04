@@ -22,8 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -32,6 +36,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private CircleImageView mAvator;
 
     private static final String TAG = "MainActivity.java";
 
@@ -61,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
+
+
         // Set behavior of Navigation drawer
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -70,7 +79,17 @@ public class MainActivity extends AppCompatActivity {
                         // Set item in checked state
                         menuItem.setChecked(true);
 
-                        // TODO: handle navigation
+                        int id = menuItem.getItemId();
+
+                        if(id == R.id.item_profile){
+
+                            return true;
+                        }
+
+                        else if(id == R.id.item_about_msurvey){
+
+                            return true;
+                        }
 
                         // Closing drawer on item click
                         mDrawerLayout.closeDrawers();
@@ -86,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                         Snackbar.LENGTH_LONG).show();
             }
         });
+
+
     }
 
     // Add Fragments to Tabs
@@ -129,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -140,11 +161,14 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        } else if (id == android.R.id.home) {
-//            mDrawerLayout.openDrawer(GravityCompat.START);
-//        }
+
+
+        if (id == android.R.id.home) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
+
 }

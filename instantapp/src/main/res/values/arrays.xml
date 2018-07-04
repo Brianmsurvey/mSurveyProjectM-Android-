@@ -16,4 +16,22 @@
         <item name="sevenquestions">7 questions</item>
     </string-array>
 
+    <string-array name="questions">
+        <item name="doyouuseadebitcard">Do you use a debit card?</item>
+        <item name="howoften">How often do you use your debit card?</item>
+        <item name="whatfor">What do you use your debit card for?</item>
+        <item name="whatkind">What kind of debit card?</item>
+        <item name="enjoy">Do you enjoy debit banking?</item>
+        <item name="money">Do you print money?</item>
+    </string-array>
+
+    <string-array name="responses">
+        <item name="first">Yes</item>
+        <item name="second">3 times a week</item>
+        <item name="third">Paying bills</item>
+        <item name="fourth">Visa</item>
+        <item name="fifth">Yes</item>
+        <item name="sixth">Yes</item>
+    </string-array>
+
 </resources>
