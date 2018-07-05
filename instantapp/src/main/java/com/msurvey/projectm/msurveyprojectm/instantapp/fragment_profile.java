@@ -1,5 +1,6 @@
 package com.msurvey.projectm.msurveyprojectm.instantapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -9,16 +10,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.NetworkUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class fragment_profile extends Fragment {
 
     private RecyclerView recyclerView;
+    private TextView AirtimeEarned;
+    private TextView SurveysCompleted;
+
+    private static final String TAG = "Fragment profile says: ";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +35,13 @@ public class fragment_profile extends Fragment {
 
         recyclerView = profileFragmentView.findViewById(R.id.rv_recents);
 
+        AirtimeEarned = profileFragmentView.findViewById(R.id.airtime_earned_no);
+
+        SurveysCompleted = profileFragmentView.findViewById(R.id.questions_completed_no);
+
+        AirtimeEarned.setText(NetworkUtils.getAirtimeEarned());
+
+        SurveysCompleted.setText(NetworkUtils.getSurveysCompletedNo());
 
         ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setAdapter(adapter);
@@ -34,6 +49,19 @@ public class fragment_profile extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return profileFragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+//        getArgument = getArguments().getString("airtime");
+
+
+//
+//        AirtimeEarned.setText(getArgument);
+
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -95,4 +123,5 @@ public class fragment_profile extends Fragment {
             return LENGTH;
         }
     }
+
 }

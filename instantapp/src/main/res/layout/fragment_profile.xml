@@ -125,7 +125,7 @@
                         android:id="@+id/questions_completed_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/questions_completed"
+                        android:text="@string/surveys_completed"
                         android:textColor="@color/colorLightGrey"
                         android:textSize="9sp" />
 

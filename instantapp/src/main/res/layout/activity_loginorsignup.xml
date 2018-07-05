@@ -47,7 +47,7 @@
             android:layout_marginRight="72dp"
             android:layout_gravity="center"
             android:stateListAnimator="@null"
-            android:text="@string/Sign_up"
+            android:text="@string/log_in"
             android:textSize="14sp"
             android:textColor="@color/white"
             android:background="@drawable/roundedbutton" />
