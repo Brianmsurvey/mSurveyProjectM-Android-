@@ -3,25 +3,15 @@ package com.msurvey.projectm.msurveyprojectm.instantapp;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.HTTPDataHandler;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.NetworkUtils;
 
@@ -30,102 +20,93 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class LoginOrSignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
-    private static final String EMAIL = "email";
+    private TextInputLayout phoneNoInputLayout;
 
-    private static final String TAG = "Log in says this: ";
+    private TextInputLayout passwordInputLayout;
 
-    private LinearLayout layoutRest;
+    private EditText phoneNoEditText;
 
-    private TextView SigningIn;
+    private EditText passwordEditText;
+
+    private Button signInButton;
 
     private ProgressBar progressBar;
 
-    CallbackManager callbackManager = CallbackManager.Factory.create();
-
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_loginorsignup);
+        setContentView(R.layout.activity_login);
 
-
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-
-        Button loginButton = findViewById(R.id.login_button);
-        //loginButton.setReadPermissions(Arrays.asList(EMAIL));
-        // If you are using in a fragment, call loginButton.setFragment(this);
-
-        Button signup = findViewById(R.id.btn_signup);
-
-        layoutRest = findViewById(R.id.layout_rest);
-
-        SigningIn = findViewById(R.id.tv_signing_in);
-
+        //UI
+        phoneNoInputLayout = findViewById(R.id.phoneno_input_layout_name);
+        passwordInputLayout = findViewById(R.id.password_input_layout_name);
+        phoneNoEditText = findViewById(R.id.et_phoneno);
+        passwordEditText = findViewById(R.id.et_password);
         progressBar = findViewById(R.id.progress_bar);
+        signInButton = findViewById(R.id.login_button);
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(NetworkUtils.getPhoneNumber().equals("0")){
-                    new ProfileAsyncTask().execute(NetworkUtils.getTestUrl());
-                }else{
-                    Intent mainIntent = new Intent(LoginOrSignUpActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
-                }
+                login();
 
-
-
-            }
-        });
-
-
-
-        // Callback registration
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                // App code
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                // App code
-//            }
-//
-//            @Override
-//            public void onError(FacebookException exception) {
-//                // App code
-//            }
-//        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent loginIntent = new Intent(LoginOrSignUpActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
-
-                //Facebook auth logic
             }
         });
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+
+    public void login(){
+
+        String phoneNumber = phoneNoEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if(validatePhoneNumber(phoneNumber)){
+
+            phoneNumber = "254" + phoneNumber.substring(1);
+            NetworkUtils.setPhoneNumber(phoneNumber);
+            NetworkUtils.setCurrent_db_url(phoneNumber);
+            if(!NetworkUtils.getPhoneNumber().equals("0")){
+                Log.e(TAG, NetworkUtils.getCurrent_db_url());
+                new ProfileAsyncTask().execute(NetworkUtils.getCurrent_db_url());
+            }
+
+        }
+
     }
 
 
+    public boolean validatePhoneNumber(String PhoneNumber)
+    {
+
+        String firstNos = PhoneNumber.substring(0, 2);
+
+        if(!firstNos.equals("07")){
+            phoneNoInputLayout.setErrorEnabled(true);
+            phoneNoInputLayout.setError("Not a valid phone number");
+            return false;
+        }
+
+        if(PhoneNumber.length() <10){
+            phoneNoInputLayout.setError("Not long enough");
+            return false;
+        }else if(PhoneNumber.length() > 10){
+            phoneNoInputLayout.setError("Too long");
+        }else{
+            return true;
+        }
+
+        return true;
+    }
 
     private class ProfileAsyncTask extends AsyncTask<String, Void, String> {
 
@@ -134,9 +115,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            SigningIn.setVisibility(View.VISIBLE);
+            signInButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-            layoutRest.setVisibility(View.INVISIBLE);
 
         }
 
@@ -223,12 +203,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
 
 
-                    Intent mainIntent = new Intent(LoginOrSignUpActivity.this, MainActivity.class);
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(mainIntent);
 
-                    SigningIn.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
-                    layoutRest.setVisibility(View.VISIBLE);
+                    signInButton.setVisibility(View.VISIBLE);
 
                 }
                 catch (JSONException e)
@@ -244,7 +223,4 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 }

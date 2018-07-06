@@ -23,13 +23,15 @@ public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json";
+    private static String phoneNumber = "0";
+
+    private static String current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B"+ NetworkUtils.getPhoneNumber() +"%22&fq=-surveyIncentive:0&wt=json&rows=40";
+
+    private static final String testUrl = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json&rows=40";
 
     private static final String BASE_URL = "https://dev.msurvey.co.ke:8984/solr/leen/select?";
 
-    private static String var = "nonsense";
 
-    private static String phoneNumber = "0";
 
     private static String airtimeEarned = "0";
 
@@ -220,6 +222,15 @@ public class NetworkUtils {
     public static String getBaseUrl() {
         return BASE_URL;
     }
+
+    public static String getTestUrl() {
+        return testUrl;
+    }
+
+    public static void setCurrent_db_url(String phoneNumber) {
+        NetworkUtils.current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B"+ phoneNumber +"%22&fq=-surveyIncentive:0&wt=json&rows=40";
+    }
+
 
     public static String getCurrent_db_url() {
         return current_db_url;

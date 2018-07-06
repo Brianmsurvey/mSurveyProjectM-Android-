@@ -19,6 +19,10 @@
     <string name="Sign_up">Sign Up</string>
     <string name="Signing_In">Signing In...</string>
 
+    <!--Login page-->
+    <string name="phone_no_hint">Phone Number</string>
+    <string name="password_hint">Password</string>
+
     <!--facebook auth-->
     <string name="facebook_app_id">240195956789125</string>
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
