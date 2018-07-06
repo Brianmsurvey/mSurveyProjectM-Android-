@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -35,6 +38,12 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "Log in says this: ";
 
+    private LinearLayout layoutRest;
+
+    private TextView SigningIn;
+
+    private ProgressBar progressBar;
+
     CallbackManager callbackManager = CallbackManager.Factory.create();
 
 
@@ -49,46 +58,59 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
 
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        Button loginButton = findViewById(R.id.login_button);
+        //loginButton.setReadPermissions(Arrays.asList(EMAIL));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         Button signup = findViewById(R.id.btn_signup);
+
+        layoutRest = findViewById(R.id.layout_rest);
+
+        SigningIn = findViewById(R.id.tv_signing_in);
+
+        progressBar = findViewById(R.id.progress_bar);
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json";
-                new ProfileAsyncTask().execute(url);
+                if(NetworkUtils.getPhoneNumber().equals("0")){
+                    new ProfileAsyncTask().execute(NetworkUtils.getCurrent_db_url());
+                }else{
+                    Intent mainIntent = new Intent(LoginOrSignUpActivity.this, MainActivity.class);
+                    startActivity(mainIntent);
+                }
+
+
 
             }
         });
+
+
 
         // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
+//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                // App code
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                // App code
+//            }
+//
+//            @Override
+//            public void onError(FacebookException exception) {
+//                // App code
+//            }
+//        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json";
-                new ProfileAsyncTask().execute(url);
+                //Facebook auth logic
             }
         });
 
@@ -109,6 +131,10 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
+            SigningIn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            layoutRest.setVisibility(View.INVISIBLE);
+
         }
 
         @Override
@@ -122,11 +148,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
             String stream;
             String urlString = url[0];
-            Log.e(TAG, urlString);
 
             HTTPDataHandler httpDatahandler = new HTTPDataHandler();
             stream = httpDatahandler.GetHTTPData(urlString);
-            Log.e(TAG, stream);
 
             return stream;
 
@@ -136,7 +160,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            //Log.e(TAG, s);
 
             if(s != null){
 
@@ -148,6 +171,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     //Get JSON Object Results
                     String response = reader.getString("response");
                     JSONObject outerDocs = new JSONObject(response);
+
                     JSONArray docsArray = outerDocs.getJSONArray("docs");
                     String[] docs = new String[docsArray.length()];
                     for(int i = 0; i<docsArray.length(); i++){
@@ -156,31 +180,28 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                     JSONObject profileJSON = new JSONObject(docs[0]);
 
-                    //Set profile information
-                    //profile.setCommId(profileJSON.getString("commId"));
+//                    Retrieve Phone Number
                     String phoneNum = profileJSON.getString("commId");
 
+//                    String Array to capture financial incentive so far;
                     ArrayList<String> survIncentives = new ArrayList<>();
 
-//                    String mes = "The length of docs is : " + String.valueOf(docs.length);
-//                    //Log.e(TAG, mes);
-//                    JSONObject current = new JSONObject(docs[3]);
-//                    mes = "The current incentive is : " + current.getString("surveyIncentive");
-//                    Log.e(TAG, mes);
 
+                    //Retrieve the current incentive from every row entry
                     for(int i=0; i<docs.length; i++){
                         JSONObject current = new JSONObject(docs[i]);
 
-                        //Log.e(TAG, current.getString("surveyIncentive"));
-
+//                      Add incentives to the String array
                         if(current.getString("surveyIncentive") != null){
                             survIncentives.add(current.getString("surveyIncentive"));
                         }
 
                     }
 
-
+                    //Retrieve Number of surveys done
                     int incentivesNo = survIncentives.size();
+
+                    //Compute total airtime earned
                     int totalAirtimeEarned = 0;
 //
                     for(int i=0; i<incentivesNo; i++){
@@ -189,16 +210,22 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     }
 //
                     String airtime = String.valueOf(totalAirtimeEarned);
+                    //
 
-                    //profile.setAirtimeEarned(value);
-
+                    //Pass the values to the profile fragment via the NetworkUtils class
                     NetworkUtils.setAirtimeEarned(airtime);
                     NetworkUtils.setPhoneNumber(phoneNum);
                     NetworkUtils.setSurveysCompletedNo(String.valueOf(incentivesNo));
 
 
+
+
                     Intent mainIntent = new Intent(LoginOrSignUpActivity.this, MainActivity.class);
                     startActivity(mainIntent);
+
+                    SigningIn.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    layoutRest.setVisibility(View.VISIBLE);
 
                 }
                 catch (JSONException e)

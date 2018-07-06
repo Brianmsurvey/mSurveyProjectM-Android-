@@ -51,18 +51,6 @@ public class fragment_profile extends Fragment {
         return profileFragmentView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-//        getArgument = getArguments().getString("airtime");
-
-
-//
-//        AirtimeEarned.setText(getArgument);
-
-
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 

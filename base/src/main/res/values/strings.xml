@@ -17,6 +17,7 @@
     <string name="log_in">Sign In</string>
     <string name="Continue_with_facebook">Continue with Facebook</string>
     <string name="Sign_up">Sign Up</string>
+    <string name="Signing_In">Signing In...</string>
 
     <!--facebook auth-->
     <string name="facebook_app_id">240195956789125</string>

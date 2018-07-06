@@ -23,7 +23,7 @@ public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?wt=json";
+    private static final String current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json";
 
     private static final String BASE_URL = "https://dev.msurvey.co.ke:8984/solr/leen/select?";
 
@@ -221,12 +221,8 @@ public class NetworkUtils {
         return BASE_URL;
     }
 
-    public static String getVar() {
-        return var;
-    }
-
-    public static void setVar(String var) {
-        NetworkUtils.var = var;
+    public static String getCurrent_db_url() {
+        return current_db_url;
     }
 
     public static String getAirtimeEarned() {

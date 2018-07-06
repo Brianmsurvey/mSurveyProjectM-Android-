@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/navheader"
+    android:background="@color/colorPrimaryDark"
     android:padding="@dimen/md_keylines">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_user_image"
         android:layout_marginTop="40dp"
         android:layout_width="64dp"
-        android:layout_height="64dp" />
+        android:layout_height="64dp"
+        android:src="@drawable/profilepic"/>
 
     <TextView
         android:id="@+id/tv_user_name"
@@ -20,7 +21,6 @@
         android:layout_below="@+id/civ_user_image"
         android:textColor="@color/white"
         tools:text="@string/dummy_user"
-        android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="@dimen/article_subheading"/>
 
     <TextView
@@ -31,6 +31,5 @@
         android:layout_below="@+id/tv_user_name"
         android:textColor="@color/white"
         tools:text="@string/dummy_user_email"
-        android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="@dimen/list_body" />
 </RelativeLayout>
