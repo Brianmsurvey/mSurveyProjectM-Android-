@@ -27,6 +27,9 @@
     <string name="facebook_app_id">240195956789125</string>
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
 
+    <!--Main Activity Page-->
+    <string name="changepic">Change Picture</string>
+
     <!--Sample surveys-->
     <string name="cashvsdebitcards">Cash vs Debit Cards?</string>
     <string name="carsvsmatatus">Cars vs Matatus?</string>

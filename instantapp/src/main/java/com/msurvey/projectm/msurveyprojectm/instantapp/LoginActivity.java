@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity{
             NetworkUtils.setPhoneNumber(phoneNumber);
             NetworkUtils.setCurrent_db_url(phoneNumber);
             if(!NetworkUtils.getPhoneNumber().equals("0")){
-                Log.e(TAG, NetworkUtils.getCurrent_db_url());
+                //Log.e(TAG, NetworkUtils.getCurrent_db_url());
                 new ProfileAsyncTask().execute(NetworkUtils.getCurrent_db_url());
             }
 

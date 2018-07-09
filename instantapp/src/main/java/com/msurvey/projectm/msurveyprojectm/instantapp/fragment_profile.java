@@ -2,7 +2,10 @@ package com.msurvey.projectm.msurveyprojectm.instantapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,14 +20,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.NetworkUtils;
+import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.PhotoUtils;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class fragment_profile extends Fragment {
 
     private RecyclerView recyclerView;
     private TextView AirtimeEarned;
     private TextView SurveysCompleted;
+    private CircleImageView mAvator;
 
     private static final String TAG = "Fragment profile says: ";
 
@@ -39,9 +47,38 @@ public class fragment_profile extends Fragment {
 
         SurveysCompleted = profileFragmentView.findViewById(R.id.questions_completed_no);
 
+        mAvator = profileFragmentView.findViewById(R.id.civ_profile_avator);
+
         AirtimeEarned.setText(NetworkUtils.getAirtimeEarned());
 
         SurveysCompleted.setText(NetworkUtils.getSurveysCompletedNo());
+
+        //Get the Shared Preferences
+        final SharedPreferences preferences = getActivity().getSharedPreferences("my_preferences", MODE_PRIVATE);
+        final String imageFound = "image_found";
+
+        if(!preferences.getString(imageFound, "").equals("")) {
+
+            Uri image = Uri.parse(preferences.getString(imageFound, ""));
+            Picasso.get().load(image).resize(660, 660).centerInside().into(mAvator);
+
+        }
+
+        if(PhotoUtils.getResultImageUri() != null){
+
+            Picasso.get().load(PhotoUtils.getResultImageUri()).resize(660, 660).centerInside().into(mAvator);
+
+        }
+
+        mAvator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent changePhotoIntent = new Intent(getActivity(), ChangePhotoActivity.class);
+                startActivity(changePhotoIntent);
+
+            }
+        });
 
         ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setAdapter(adapter);
@@ -51,6 +88,16 @@ public class fragment_profile extends Fragment {
         return profileFragmentView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if(PhotoUtils.getResultImageUri() != null){
+
+            Picasso.get().load(PhotoUtils.getResultImageUri()).resize(660, 660).centerInside().into(mAvator);
+
+        }
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 

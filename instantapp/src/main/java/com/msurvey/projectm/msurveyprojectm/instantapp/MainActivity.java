@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, messagen);
 
-
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -187,6 +186,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
 
+        if(id == R.id.item_changepic){
+
+        }
+
+        if(id == R.id.item_profile){
+
+        }
 
         if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
