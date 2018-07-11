@@ -35,6 +35,15 @@
 
         <activity android:name=".ChangePhotoActivity"/>
 
+        <receiver android:name=".Utilities.SmsBroadCastReceiver"
+            android:permission="android.permission.READ_SMS"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -4,7 +4,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
@@ -27,9 +28,7 @@
 
         <activity android:name=".LoginOrSignUpActivity"/>
 
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"/>
 
         <activity android:name=".LoginActivity"/>
 
@@ -37,6 +36,15 @@
             android:theme="@style/Base.Theme.AppCompat"/>
 
         <activity android:name=".ChangePhotoActivity"/>
+
+        <receiver android:name=".Utilities.SmsBroadCastReceiver"
+            android:permission="android.permission.READ_SMS"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
