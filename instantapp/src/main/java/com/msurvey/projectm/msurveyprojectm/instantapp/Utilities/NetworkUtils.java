@@ -1,5 +1,7 @@
 package com.msurvey.projectm.msurveyprojectm.instantapp.Utilities;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,12 +27,11 @@ public class NetworkUtils {
 
     private static String phoneNumber = "0";
 
-    private static String current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B"+ NetworkUtils.getPhoneNumber() +"%22&fq=-surveyIncentive:0&wt=json&rows=40";
+    private static String current_db_url = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B" + NetworkUtils.getPhoneNumber() + "%22&fq=-surveyIncentive:0&wt=json&rows=40";
 
     private static final String testUrl = "https://dev.msurvey.co.ke:8984/solr/leen/select?q=commId:%22%2B254713740504%22&fq=-surveyIncentive:0&wt=json&rows=40";
 
     private static final String BASE_URL = "https://dev.msurvey.co.ke:8984/solr/leen/select?";
-
 
 
     private static String airtimeEarned = "0";
@@ -55,14 +56,13 @@ public class NetworkUtils {
     private static final String incentiveConstraint = "-surveyIncentive:0";
 
 
-
     final static String QUERY_PARAM = "q";
     final static String FILTER_PARAM = "fq";
     final static String FORMAT_PARAM = "wt";
     final static String ROWS_PARAM = "rows";
     final static String FIELDS_PARAM = "fl";
 
-    public static URL buildUrl(String phoneNumberQuery){
+    public static URL buildUrl(String phoneNumberQuery) {
 
         String finalPhoneNoQuery = commId + phoneNumberQuery.substring(1) + commSuffix;
 
@@ -73,9 +73,9 @@ public class NetworkUtils {
                 .build();
 
         URL url = null;
-        try{
+        try {
             url = new URL(builtUri.toString());
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
@@ -88,20 +88,20 @@ public class NetworkUtils {
     public static String getResponseFromHttpUrl(URL url) throws IOException {
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try{
+        try {
             InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
-            if(hasInput){
+            if (hasInput) {
                 return scanner.next();
-            }else{
+            } else {
                 return null;
             }
 
-        }finally {
+        } finally {
             urlConnection.disconnect();
         }
     }
@@ -118,7 +118,7 @@ public class NetworkUtils {
         @Override
         protected String doInBackground(String... url) {
 
-            if(url.length == 0) {
+            if (url.length == 0) {
                 //no url
                 return null;
             }
@@ -142,9 +142,9 @@ public class NetworkUtils {
 
             //Log.e(TAG, s);
 
-            if(s != null){
+            if (s != null) {
 
-                try{
+                try {
                     //Get HTTP as JSONObject
                     JSONObject reader = new JSONObject(s);
 
@@ -154,7 +154,7 @@ public class NetworkUtils {
                     JSONObject outerDocs = new JSONObject(response);
                     JSONArray docsArray = outerDocs.getJSONArray("docs");
                     String[] docs = new String[docsArray.length()];
-                    for(int i = 0; i<docsArray.length(); i++){
+                    for (int i = 0; i < docsArray.length(); i++) {
                         docs[i] = docsArray.getString(i);
                     }
 
@@ -172,12 +172,12 @@ public class NetworkUtils {
 //                    mes = "The current incentive is : " + current.getString("surveyIncentive");
 //                    Log.e(TAG, mes);
 
-                    for(int i=0; i<docs.length; i++){
+                    for (int i = 0; i < docs.length; i++) {
                         JSONObject current = new JSONObject(docs[i]);
 
                         //Log.e(TAG, current.getString("surveyIncentive"));
 
-                        if(current.getString("surveyIncentive") != null){
+                        if (current.getString("surveyIncentive") != null) {
                             survIncentives.add(current.getString("surveyIncentive"));
                         }
 
@@ -187,7 +187,7 @@ public class NetworkUtils {
                     int incentivesNo = survIncentives.size();
                     int totalAirtimeEarned = 0;
 //
-                    for(int i=0; i<incentivesNo; i++){
+                    for (int i = 0; i < incentivesNo; i++) {
 
                         totalAirtimeEarned = totalAirtimeEarned + Integer.parseInt(survIncentives.get(i));
                     }
@@ -204,14 +204,12 @@ public class NetworkUtils {
                     Log.e(TAG, mess);
 
 
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-            if(s != null){
+            if (s != null) {
 
             }
 
@@ -219,7 +217,9 @@ public class NetworkUtils {
 
     }
 
-    public static String getBaseUrl() {
+
+
+public static String getBaseUrl() {
         return BASE_URL;
     }
 
