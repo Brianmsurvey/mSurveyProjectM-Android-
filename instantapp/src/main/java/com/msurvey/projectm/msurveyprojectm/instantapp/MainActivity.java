@@ -34,7 +34,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.accountkit.AccessToken;
+import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.HTTPDataHandler;
@@ -61,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private CircleImageView mAvator;
     private Profile profile;
     private SmsBroadCastReceiver mSmsReceiver;
+
+    private String accountEmail;
+    private String accountId;
+    private String accountPhone;
 
     //Firebase
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -207,9 +214,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+            @Override
+            public void onSuccess(Account account) {
+
+                accountId = account.getId();
+                accountEmail = account.getEmail();
+                accountPhone = account.getPhoneNumber().toString();
+
+            }
+
+            @Override
+            public void onError(AccountKitError accountKitError) {
+
+            }
+        });
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(mSmsReceiver);
+        //unregisterReceiver(mSmsReceiver);
     }
 
     // Add Fragments to Tabs
@@ -265,8 +293,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
 
-        if(id == R.id.item_changepic){
-
+        if(id == R.id.item_logout){
+            AccountKit.logOut();
+            finish();
         }
 
         if(id == R.id.item_profile){

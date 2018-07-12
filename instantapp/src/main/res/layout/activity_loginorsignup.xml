@@ -73,7 +73,7 @@
                 android:layout_marginRight="72dp"
                 android:layout_gravity="center"
                 android:stateListAnimator="@null"
-                android:text="@string/Sign_up"
+                android:text="@string/Loginwithfacebook"
                 android:textSize="14sp"
                 android:textColor="@color/colorPrimary"
                 android:background="@drawable/roundedbutton_white" />
@@ -87,7 +87,7 @@
                 android:layout_marginRight="72dp"
                 android:layout_gravity="center"
                 android:stateListAnimator="@null"
-                android:text="@string/log_in"
+                android:text="@string/Loginwithnumber"
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 android:background="@drawable/roundedbutton" />
