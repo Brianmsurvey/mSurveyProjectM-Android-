@@ -34,7 +34,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.accountkit.AccessToken;
+import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.HTTPDataHandler;
@@ -61,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private CircleImageView mAvator;
     private Profile profile;
     private SmsBroadCastReceiver mSmsReceiver;
+
+    private String accountEmail;
+    private String accountId;
+    private String accountPhone;
 
     //Firebase
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -207,9 +214,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+            @Override
+            public void onSuccess(Account account) {
+
+                accountId = account.getId();
+                accountEmail = account.getEmail();
+                accountPhone = account.getPhoneNumber().toString();
+
+            }
+
+            @Override
+            public void onError(AccountKitError accountKitError) {
+
+            }
+        });
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(mSmsReceiver);
+        //unregisterReceiver(mSmsReceiver);
     }
 
     // Add Fragments to Tabs
@@ -265,8 +293,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
 
-        if(id == R.id.item_changepic){
+        if(id == R.id.item_logout){
+            AccountKit.logOut();
+            Intent loginorsigninIntent = new Intent(this, LoginOrSignUpActivity.class);
+            startActivity(loginorsigninIntent);
 
+            finish();
         }
 
         if(id == R.id.item_profile){
@@ -337,11 +369,6 @@ public class MainActivity extends AppCompatActivity {
                     //Set profile information
                     profile.setCommId(profileJSON.getString("commId"));
 
-//                    String mes = "The length of docs is : " + String.valueOf(docs.length);
-//                    //Log.e(TAG, mes);
-//                    JSONObject current = new JSONObject(docs[3]);
-//                    mes = "The current incentive is : " + current.getString("surveyIncentive");
-//                    Log.e(TAG, mes);
 
                     for(int i=0; i<docs.length; i++){
                         JSONObject current = new JSONObject(docs[i]);
@@ -366,13 +393,6 @@ public class MainActivity extends AppCompatActivity {
                     String value = String.valueOf(totalAirtimeEarned);
 
                     profile.setAirtimeEarned(value);
-
-                    fragment_profile f = new fragment_profile();
-                    Bundle args = new Bundle();
-                    args.putString("airtime", value);
-                    f.setArguments(args);
-                    String mess = "The bundle contains some of that: " + args.get("airtime");
-                    Log.e(TAG, mess);
 
 
                 }
