@@ -13,12 +13,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.accountkit.Account;
+import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
+import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
+import com.facebook.accountkit.ui.AccountKitActivity;
+import com.facebook.accountkit.ui.AccountKitConfiguration;
+import com.facebook.accountkit.ui.LoginType;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -58,7 +68,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
 
-        Button loginButton = findViewById(R.id.login_button);
+        final Button loginButton = findViewById(R.id.login_button);
         //loginButton.setReadPermissions(Arrays.asList(EMAIL));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
@@ -110,8 +120,10 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent loginIntent = new Intent(LoginOrSignUpActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+//                Intent loginIntent = new Intent(LoginOrSignUpActivity.this, LoginActivity.class);
+//                startActivity(loginIntent);
+
+                phoneLogin(loginButton);
 
                 //Facebook auth logic
             }
@@ -119,11 +131,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        callbackManager.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
 
 
@@ -244,6 +256,87 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         }
 
     }
+
+    public static int APP_REQUEST_CODE = 4;
+
+    public void phoneLogin(final View view) {
+        final Intent intent = new Intent(LoginOrSignUpActivity.this, AccountKitActivity.class);
+        AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
+                new AccountKitConfiguration.AccountKitConfigurationBuilder(
+                        LoginType.PHONE,
+                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
+        // ... perform additional configuration ...
+        intent.putExtra(
+                AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
+                configurationBuilder.build());
+        startActivityForResult(intent, APP_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(
+            final int requestCode,
+            final int resultCode,
+            final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
+            AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
+            String toastMessage;
+            if (loginResult.getError() != null) {
+                toastMessage = loginResult.getError().getErrorType().getMessage();
+                //showErrorActivity(loginResult.getError());
+            } else if (loginResult.wasCancelled()) {
+                toastMessage = "Login Cancelled";
+            } else {
+                if (loginResult.getAccessToken() != null) {
+                    toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
+                } else {
+                    toastMessage = String.format(
+                            "Success:%s...",
+                            loginResult.getAuthorizationCode().substring(0,10));
+                }
+
+                // If you have an authorization code, retrieve it from
+                // loginResult.getAuthorizationCode()
+                // and pass it to your server and exchange it for an access token.
+
+                // Success! Start your next activity...
+                //goToMyLoggedInActivity();
+            }
+
+            // Surface the result to your user in an appropriate way.
+            Toast.makeText(
+                    this,
+                    toastMessage,
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+
+    //AccountKit.logOut();
+
+//    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+//        @Override
+//        public void onSuccess(final Account account) {
+//            // Get Account Kit ID
+//            String accountKitId = account.getId();
+//
+//            // Get phone number
+//            PhoneNumber phoneNumber = account.getPhoneNumber();
+//            if (phoneNumber != null) {
+//                String phoneNumberString = phoneNumber.toString();
+//            }
+//
+//            // Get email
+//            String email = account.getEmail();
+//        }
+//
+//        @Override
+//        public void onError(final AccountKitError error) {
+//            // Handle Error
+//        }
+//    });
+
 
 
 

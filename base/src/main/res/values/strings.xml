@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Project M</string>
     <string name="airtime_earned">AIRTIME EARNED</string>
     <string name="this_month">This Month</string>
     <string name="amount_earned">AMOUNT EARNED</string>
@@ -13,19 +12,29 @@
     <string name="msurvey_motto">Real people. Real thoughts. \n Real time.</string>
 
 
+    <!--facebook account kit-->
+    <string name="app_name">mSurvey Project M</string>
+    <string name="facebook_app_id">240195956789125</string>
+    <string name="FACEBOOK_APP_ID">240195956789125</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">bc754174131e1a8e1e94381a8cff8e85</string>
+
+
+
     <!--Log In or Sign Up Page-->
     <string name="log_in">Sign In</string>
     <string name="Continue_with_facebook">Continue with Facebook</string>
     <string name="Sign_up">Sign Up</string>
     <string name="Signing_In">Signing In...</string>
+    <string name="Loginwithnumber">Login with Phone Number</string>
+    <string name="Loginwithfacebook">Login with Facebook</string>
 
     <!--Login page-->
     <string name="phone_no_hint">Phone Number</string>
     <string name="password_hint">Password</string>
 
-    <!--facebook auth-->
-    <string name="facebook_app_id">240195956789125</string>
-    <string name="fb_login_protocol_scheme">fb240195956789125</string>
+    <!--&lt;!&ndash;facebook auth&ndash;&gt;-->
+    <!--<string name="facebook_app_id">240195956789125</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb240195956789125</string>-->
 
     <!--Main Activity Page-->
     <string name="changepic">Change Picture</string>
