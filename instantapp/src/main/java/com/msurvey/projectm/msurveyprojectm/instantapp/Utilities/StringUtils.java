@@ -33,4 +33,17 @@ public class StringUtils {
 
         return regexMatcher.group();
     }
+
+    public static String regexChecker(String stringToCheck, String regexPattern){
+
+        Pattern checkRegex = Pattern.compile(regexPattern);
+
+        Matcher regexMatcher = checkRegex.matcher(stringToCheck);
+
+        if(regexMatcher.find()){
+            return regexMatcher.group();
+        } else {
+            return "nothing";
+        }
+    }
 }

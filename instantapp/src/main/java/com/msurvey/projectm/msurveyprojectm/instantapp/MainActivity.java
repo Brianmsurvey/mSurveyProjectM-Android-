@@ -1,12 +1,16 @@
 package com.msurvey.projectm.msurveyprojectm.instantapp;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -29,7 +33,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.accountkit.AccessToken;
+import com.facebook.accountkit.AccountKit;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.HTTPDataHandler;
+import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.MpesaUtils;
+import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.SmsBroadCastReceiver;
+import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.SmsUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,17 +60,33 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private CircleImageView mAvator;
     private Profile profile;
+    private SmsBroadCastReceiver mSmsReceiver;
+
+    //Firebase
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mUserDatabase = database.getReference("Users");
 
 
     private static final String TAG = "MainActivity.java";
 
     private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e(TAG, "We here now");
+
+
+        AccessToken accessToken = AccountKit.getCurrentAccessToken();
+
+        if (accessToken != null) {
+            //Handle Returning User
+        } else {
+            //Handle new or logged out user
+        }
 
 
         // Adding Toolbar to Main screen
@@ -101,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.RECEIVE_SMS},
+                    MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+        }
+
+
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
@@ -114,6 +149,20 @@ public class MainActivity extends AppCompatActivity {
 
             scrapeMpesaSms();
 
+            User user = new User();
+
+            user.setName("Test User");
+
+            SmsUtils.parseSms(user, SmsUtils.scrapeMpesaSms(this));
+
+
+            mUserDatabase.push().setValue(user);
+
+//            LogSampleMpesaSms();
+
+//            mSmsReceiver = new SmsBroadCastReceiver();
+//
+//            registerReceiver(mSmsReceiver, new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION));
         }
 
 
@@ -154,6 +203,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mSmsReceiver);
     }
 
     // Add Fragments to Tabs
@@ -337,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void scrapeMpesaSms(){
         StringBuilder smsBuilder = new StringBuilder();
+        ArrayList<String> allSms = new ArrayList<>();
         final String SMS_URI_INBOX = "content://sms/inbox";
         final String SMS_URI_ALL = "content://sms/";
         try {
@@ -363,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
                     smsBuilder.append(longDate + ", ");
                     smsBuilder.append(int_Type);
                     smsBuilder.append(" ]\n\n");
+                    allSms.add("[ " + strAddress + ", " + intPerson + ", " + strbody + ", " + longDate + ", " + int_Type + " ]");
                 } while (cur.moveToNext());
 
                 if (!cur.isClosed()) {
@@ -378,7 +436,10 @@ public class MainActivity extends AppCompatActivity {
 
         String result = smsBuilder.toString();
         Log.e(TAG, result);
+
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
@@ -398,9 +459,43 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+
+                    scrapeMpesaSms();
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+
+            }
+
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    public void LogSampleMpesaSms(){
+
+        Log.e(TAG, MpesaUtils.transactionId);
+
+        Log.e(TAG, MpesaUtils.amountTransacted);
+
+        Log.e(TAG, MpesaUtils.mpesaBalance);
+
+        Log.e(TAG, MpesaUtils.cashReceiver);
+
+        Log.e(TAG, MpesaUtils.transactionTime);
+
+        Log.e(TAG, MpesaUtils.transactionDate);
+
+        Log.e(TAG, MpesaUtils.transactionCost);
+
     }
 
 

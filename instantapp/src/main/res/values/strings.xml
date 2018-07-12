@@ -7,6 +7,13 @@
     <string name="facebook_app_id">240195956789125</string>
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
 
+    <!--facebook account kit-->
+    <string name="app_name">mSurvey Project M</string>
+    <string name="FACEBOOK_APP_ID">240195956789125</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">bc754174131e1a8e1e94381a8cff8e85</string>
+    <string name="Loginwithnumber">Login with Phone Number</string>
+    <string name="Loginwithfacebook">Login with Facebook</string>
+
 
     <string name="cashvsdebitcards">Cash vs Debit Cards?</string>
     <string name="carsvsmatatus">Cars vs Matatus?</string>
