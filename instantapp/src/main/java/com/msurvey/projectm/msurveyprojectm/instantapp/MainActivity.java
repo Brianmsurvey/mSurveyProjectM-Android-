@@ -295,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(id == R.id.item_logout){
             AccountKit.logOut();
+            Intent loginorsigninIntent = new Intent(this, LoginOrSignUpActivity.class);
+            startActivity(loginorsigninIntent);
+
             finish();
         }
 
@@ -366,11 +369,6 @@ public class MainActivity extends AppCompatActivity {
                     //Set profile information
                     profile.setCommId(profileJSON.getString("commId"));
 
-//                    String mes = "The length of docs is : " + String.valueOf(docs.length);
-//                    //Log.e(TAG, mes);
-//                    JSONObject current = new JSONObject(docs[3]);
-//                    mes = "The current incentive is : " + current.getString("surveyIncentive");
-//                    Log.e(TAG, mes);
 
                     for(int i=0; i<docs.length; i++){
                         JSONObject current = new JSONObject(docs[i]);
@@ -395,13 +393,6 @@ public class MainActivity extends AppCompatActivity {
                     String value = String.valueOf(totalAirtimeEarned);
 
                     profile.setAirtimeEarned(value);
-
-                    fragment_profile f = new fragment_profile();
-                    Bundle args = new Bundle();
-                    args.putString("airtime", value);
-                    f.setArguments(args);
-                    String mess = "The bundle contains some of that: " + args.get("airtime");
-                    Log.e(TAG, mess);
 
 
                 }

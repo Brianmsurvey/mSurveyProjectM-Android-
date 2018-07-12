@@ -85,6 +85,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_bar);
 
+
+        //User has no AOD profile associated with this device.
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,25 +105,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         });
 
 
-
-        // Callback registration
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                // App code
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                // App code
-//            }
-//
-//            @Override
-//            public void onError(FacebookException exception) {
-//                // App code
-//            }
-//        });
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,12 +119,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         });
 
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
 
 
 
@@ -243,6 +220,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                     Intent mainIntent = new Intent(LoginOrSignUpActivity.this, MainActivity.class);
                     startActivity(mainIntent);
+                    finish();
 
                     SigningIn.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
@@ -263,62 +241,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
     }
 
-    public static int APP_REQUEST_CODE = 4;
-
-    public void phoneLogin(final View view) {
-        final Intent intent = new Intent(LoginOrSignUpActivity.this, AccountKitActivity.class);
-        AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
-                new AccountKitConfiguration.AccountKitConfigurationBuilder(
-                        LoginType.PHONE,
-                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
-        // ... perform additional configuration ...
-        intent.putExtra(
-                AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
-                configurationBuilder.build());
-        startActivityForResult(intent, APP_REQUEST_CODE);
-    }
-
-//    @Override
-//    protected void onActivityResult(
-//            final int requestCode,
-//            final int resultCode,
-//            final Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
-//            AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
-//            String toastMessage;
-//            if (loginResult.getError() != null) {
-//                toastMessage = loginResult.getError().getErrorType().getMessage();
-//                //showErrorActivity(loginResult.getError());
-//            } else if (loginResult.wasCancelled()) {
-//                toastMessage = "Login Cancelled";
-//            } else {
-//                if (loginResult.getAccessToken() != null) {
-//                    toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
-//                } else {
-//                    toastMessage = String.format(
-//                            "Success:%s...",
-//                            loginResult.getAuthorizationCode().substring(0,10));
-//                }
-//
-//                // If you have an authorization code, retrieve it from
-//                // loginResult.getAuthorizationCode()
-//                // and pass it to your server and exchange it for an access token.
-//
-//                // Success! Start your next activity...
-//                //goToMyLoggedInActivity();
-//            }
-//
-//            // Surface the result to your user in an appropriate way.
-//            Toast.makeText(
-//                    this,
-//                    toastMessage,
-//                    Toast.LENGTH_LONG)
-//                    .show();
-//        }
-//    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -338,11 +260,51 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                 if(result.getAccessToken() != null){
                     Toast.makeText(this, "Success  !  %s" + result.getAccessToken().getAccountId(), Toast.LENGTH_SHORT).show();
+
+                    com.facebook.accountkit.AccessToken accessToken = AccountKit.getCurrentAccessToken();
+
+
+                        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                            @Override
+                            public void onSuccess(final Account account) {
+                                // Get Account Kit ID
+                                String accountKitId = account.getId();
+
+                                // Get phone number
+                                PhoneNumber phoneNumber = account.getPhoneNumber();
+                                if (phoneNumber != null) {
+                                    String phoneNumberString = phoneNumber.toString().substring(1);
+                                    NetworkUtils.setPhoneNumber(phoneNumberString);
+                                    Log.e(TAG, phoneNumberString);
+
+                                    NetworkUtils.setPhoneNumber("254713740504");
+                                    new ProfileAsyncTask().execute(NetworkUtils.getTestUrl());
+                                }
+
+                            }
+
+                            @Override
+                            public void onError(final AccountKitError error) {
+                                // Handle Error
+                                Log.e(TAG, error.toString());
+
+
+                            }
+
+                        });
                 }else {
-                    Toast.makeText(this, "Success ! %s" + result.getAuthorizationCode(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Result ! %s" + result.getAuthorizationCode(), Toast.LENGTH_SHORT).show();
                 }
 
-                startActivity(new Intent(this, MainActivity.class));
+
+                //The person has no signed in and given us their number so we need to use that
+
+//                if(NetworkUtils.getPhoneNumber().equals("0")){
+//
+//                    new ProfileAsyncTask().execute(NetworkUtils.getCurrent_db_url());
+//                }
+//
+//                startActivity(new Intent(this, MainActivity.class));
             }
 
 
@@ -364,33 +326,5 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         }
 
     }
-
-
-    //AccountKit.logOut();
-
-//    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-//        @Override
-//        public void onSuccess(final Account account) {
-//            // Get Account Kit ID
-//            String accountKitId = account.getId();
-//
-//            // Get phone number
-//            PhoneNumber phoneNumber = account.getPhoneNumber();
-//            if (phoneNumber != null) {
-//                String phoneNumberString = phoneNumber.toString();
-//            }
-//
-//            // Get email
-//            String email = account.getEmail();
-//        }
-//
-//        @Override
-//        public void onError(final AccountKitError error) {
-//            // Handle Error
-//        }
-//    });
-
-
-
 
 }
