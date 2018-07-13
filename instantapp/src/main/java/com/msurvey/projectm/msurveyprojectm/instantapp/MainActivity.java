@@ -167,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
 
 //            LogSampleMpesaSms();
 
-//            mSmsReceiver = new SmsBroadCastReceiver();
-//
-//            registerReceiver(mSmsReceiver, new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION));
+            mSmsReceiver = new SmsBroadCastReceiver();
+
+            registerReceiver(mSmsReceiver, new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION));
         }
 
 

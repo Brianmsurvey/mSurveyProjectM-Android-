@@ -140,4 +140,28 @@ public class SmsUtils {
 
     }
 
+    public static mpesaSMS parseSms(User user, String message){
+
+        mpesaSMS mpesaSMS = new mpesaSMS();
+
+        mpesaSMS.setTransactionId(StringUtils.regexChecker(message, MpesaUtils.transactionIdRegex));
+
+        mpesaSMS.setAmountTransacted(StringUtils.regexChecker(message, MpesaUtils.amountTransactionRegex));
+
+        mpesaSMS.setMpesaBalance(StringUtils.regexChecker(message, MpesaUtils.mpesaBalanceRegex));
+
+        mpesaSMS.setCashReceiver(StringUtils.regexChecker(message, MpesaUtils.cashReceiverRegex));
+
+        mpesaSMS.setTransactionTime(StringUtils.regexChecker(message, MpesaUtils.transactionTimeRegex));
+
+        mpesaSMS.setTransactionDate(StringUtils.regexChecker(message, MpesaUtils.transactionDateRegex));
+
+        String cost = StringUtils.regexChecker(message, MpesaUtils.transactionCostRegex);
+
+        mpesaSMS.setTransactionCost(cost.substring(3));
+
+        return mpesaSMS;
+
+    }
+
 }

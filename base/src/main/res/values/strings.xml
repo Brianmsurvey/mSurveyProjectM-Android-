@@ -12,6 +12,9 @@
     <string name="msurvey_motto">Real people. Real thoughts. \n Real time.</string>
 
 
+    <!--facebook auth-->
+    <string name="fb_login_protocol_scheme">fb240195956789125</string>
+
     <!--facebook account kit-->
     <string name="app_name">mSurvey Project M</string>
     <string name="facebook_app_id">240195956789125</string>
