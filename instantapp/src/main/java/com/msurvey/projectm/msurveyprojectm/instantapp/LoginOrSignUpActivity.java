@@ -86,6 +86,33 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
 
 
+        // Callback registration
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+
+                NetworkUtils.setPhoneNumber("254713740504");
+                new ProfileAsyncTask().execute(NetworkUtils.getTestUrl());
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+
+                Log.e(TAG, exception.toString());
+                Log.e(TAG, "The fblogin is definitey breaking");
+            }
+        });
+
+
+
+
         //User has no AOD profile associated with this device.
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +132,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         });
 
 
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +143,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                 //phoneLogin(loginButton);
 
                 //Facebook auth logic
+
+
+
+                LoginManager.getInstance().logInWithReadPermissions(LoginOrSignUpActivity.this, Arrays.asList("public_profile"));
+
             }
         });
 
@@ -243,6 +276,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQUEST_CODE){
