@@ -1,5 +1,7 @@
 package com.msurvey.projectm.msurveyprojectm.instantapp.Utilities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +17,17 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.msurvey.projectm.msurveyprojectm.instantapp.MainActivity;
 import com.msurvey.projectm.msurveyprojectm.instantapp.R;
 import com.msurvey.projectm.msurveyprojectm.instantapp.User;
+
+import java.util.Random;
 
 public class SmsBroadCastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "SmsBroadCastReceiver";
+
+    NotificationHelper helper;
 
     private String serviceProviderNumber;
 
@@ -53,6 +60,9 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
 
         String log = sb.toString();
 
+
+        helper = new NotificationHelper(context);
+
         //Get Message Contents
         final Bundle bundle = intent.getExtras();
 
@@ -78,6 +88,11 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
                     String message = currentMessage.getDisplayMessageBody();
 
                     Log.e(TAG, message);
+
+                    Notification.Builder builder = helper.getChanelNotification(senderNum, phoneNumber);
+                    helper.getManager().notify(new Random().nextInt(), builder.build());
+
+
                 }
             }
         }catch (Exception e) {
@@ -92,5 +107,19 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
 
     interface Listener{
         void onTextReceived(String text);
+    }
+
+    private void addNotification(Context context) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_stat_explore)
+                        .setContentTitle("Notifications Example")
+                        .setContentText("This is a test notification");
+
+
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
     }
 }

@@ -5,13 +5,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 
-import com.facebook.AccessToken;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
@@ -19,7 +15,6 @@ import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.PhoneNumber;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.HTTPDataHandler;
 import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.NetworkUtils;
-import com.msurvey.projectm.msurveyprojectm.instantapp.Utilities.NotificationUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +39,6 @@ public class SplashActivity extends AppCompatActivity {
 
         final SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         final String onboardingComplete = "onboarding_complete";
-
-        NotificationUtils.createNotificationChannel(this);
 
         new Handler().postDelayed(new Runnable() {
             @Override

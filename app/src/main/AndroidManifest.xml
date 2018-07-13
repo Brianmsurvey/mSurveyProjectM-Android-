@@ -32,6 +32,7 @@
 
 
 
+        <activity android:name=".FeedbackActivity"/>
 
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity" />
