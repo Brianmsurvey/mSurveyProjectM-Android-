@@ -89,7 +89,10 @@ public class SmsBroadCastReceiver extends BroadcastReceiver {
 
                     Log.e(TAG, message);
 
-                    Notification.Builder builder = helper.getChanelNotification(senderNum, phoneNumber);
+                    //String notificationTitle = SmsUtils.returnSmsSender(message);
+                    String notificationTitle = "Java Coffee House";
+                    String howWasYourExperience = "How was your experience at " + notificationTitle + "?";
+                    Notification.Builder builder = helper.getChanelNotification(notificationTitle, howWasYourExperience);
                     helper.getManager().notify(new Random().nextInt(), builder.build());
 
 

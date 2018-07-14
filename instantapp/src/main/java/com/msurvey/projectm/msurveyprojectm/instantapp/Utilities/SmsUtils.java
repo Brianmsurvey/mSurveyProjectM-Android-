@@ -164,4 +164,11 @@ public class SmsUtils {
 
     }
 
+    public static String returnSmsSender(String message) {
+
+        return StringUtils.regexChecker(message, MpesaUtils.cashReceiverRegex);
+
+    }
+
 }
+
