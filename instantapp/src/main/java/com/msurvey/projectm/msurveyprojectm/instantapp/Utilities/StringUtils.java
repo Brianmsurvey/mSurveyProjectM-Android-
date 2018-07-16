@@ -11,6 +11,12 @@ public class StringUtils {
 
     private static String year = "[0-9]{4}";
 
+    public static String giveFeedback = "Java Coffee House";
+
+    public static String howWasYourExperience = "How was your experience at " + giveFeedback + "?";
+
+    public static String tellUsSomething = "Tell us about it";
+
     public static String monthRegexChecker(String stringToCheck){
 
         String monthRegex = "[A-Za-z]{3}";

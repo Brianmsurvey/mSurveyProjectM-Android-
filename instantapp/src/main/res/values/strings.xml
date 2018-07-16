@@ -3,6 +3,10 @@
     <string name="frag2title">Surveys</string>
     <string name="frag3title">Cashbacks</string>
 
+    <!--Mock Store -->
+    <string name="store_name">Java Coffee House</string>
+    <string name="store_sent_time">Wednesday, 24th Sep 2018. 12:53pm</string>
+
     <!--facebook auth-->
     <string name="facebook_app_id">240195956789125</string>
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
@@ -14,6 +18,13 @@
     <string name="Loginwithnumber">Login with Phone Number</string>
     <string name="Loginwithfacebook">Login with Facebook</string>
     <string name="LogOut">Log Out</string>
+
+    <!--Emoji Responses-->
+    <string name="veryhappy">Excellent</string>
+    <string name="happy">Good</string>
+    <string name="neutral">Okay</string>
+    <string name="sad">Poor</string>
+    <string name="angry">Terrible</string>
 
 
     <string name="cashvsdebitcards">Cash vs Debit Cards?</string>

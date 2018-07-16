@@ -12,6 +12,21 @@
     <string name="msurvey_motto">Real people. Real thoughts. \n Real time.</string>
 
 
+    <!--Mock Store -->
+    <string name="store_name">Java Coffee House</string>
+    <string name="store_sent_time">Wednesday, 24th Sep 2018. 12:53pm</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="tellussomething">Tell us something</string>
+    <string name="submit_btn">Submit</string>
+
+    <!--Emoji Responses-->
+    <string name="veryhappy">Excellent</string>
+    <string name="happy">Good</string>
+    <string name="neutral">Okay</string>
+    <string name="sad">Poor</string>
+    <string name="angry">Terrible</string>
+
+
     <!--facebook auth-->
     <string name="fb_login_protocol_scheme">fb240195956789125</string>
 
