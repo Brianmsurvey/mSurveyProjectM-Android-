@@ -14,8 +14,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="?android:attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -78,7 +78,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="emoji"
-            android:background="#00FFFFFF"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/sad"
@@ -87,7 +87,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="emoji"
-            android:background="#00FFFFFF"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/neutral"
@@ -96,7 +96,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="emoji"
-            android:background="#00FFFFFF"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/happy"
@@ -105,7 +105,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="emoji"
-            android:background="#00FFFFFF"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/veryhappy"
@@ -113,7 +113,8 @@
             android:layout_margin="12dp"
             android:contentDescription="emoji"
             android:layout_width="36dp"
-            android:layout_height="36dp"/>
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
     </LinearLayout>
 
@@ -127,6 +128,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="80dp"
+        style="@style/MyEditText"
         android:textSize="20sp"
         android:hint="@string/tellussomething"
         android:inputType="textLongMessage" />
